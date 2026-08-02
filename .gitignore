@@ -1,0 +1,12 @@
+# Working files — not repo content
+SETUP-CHECKLIST.md
+CAREER-COPY.md
+
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+.venv/
+venv/
+.vscode/
+.idea/

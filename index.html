@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio Health — Program Initiative Dashboard</title>
+<meta name="description" content="A single-file, zero-dependency dashboard that surfaces stalled work across a program portfolio. Synthetic data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#131A24;
+  --canvas:#E7EBEF;
+  --card:#FFFFFF;
+  --rule:#CBD3DB;
+  --rule-soft:#E4E9ED;
+  --muted:#5C6875;
+  --band:#1B2A54;
+  --band-2:#243669;
+
+  --on-track:#0F766E;
+  --at-risk:#B45309;
+  --stalled:#9F1239;
+  --complete:#64748B;
+
+  --display:'Archivo',ui-sans-serif,system-ui,sans-serif;
+  --body:'IBM Plex Sans',ui-sans-serif,system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+
+  --gap:14px;
+  --radius:3px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  background:var(--canvas);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:14px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  padding:0 0 48px;
+}
+
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px}
+
+a{color:inherit}
+
+:focus-visible{outline:2px solid var(--band);outline-offset:2px}
+
+/* ── Header band ─────────────────────────────────────────── */
+.band{
+  background:var(--band);
+  background-image:linear-gradient(100deg,var(--band) 0%,var(--band-2) 100%);
+  color:#fff;
+  padding:26px 0 22px;
+  margin-bottom:var(--gap);
+}
+.band .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+.eyebrow{
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:#9FB0D8;
+  margin-bottom:6px;
+}
+.band h1{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:clamp(22px,3vw,31px);
+  letter-spacing:-.02em;
+  line-height:1.1;
+}
+.band .sub{color:#B9C6E4;font-size:13px;margin-top:7px;max-width:56ch}
+.stamp{font-family:var(--mono);font-size:11px;color:#9FB0D8;text-align:right;line-height:1.7}
+.stamp b{color:#fff;font-weight:500}
+
+/* ── Controls ────────────────────────────────────────────── */
+.controls{
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-radius:var(--radius);
+  padding:12px 14px;
+  display:flex;
+  gap:12px;
+  align-items:flex-end;
+  flex-wrap:wrap;
+  margin-bottom:var(--gap);
+}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.field select,.field input{
+  font-family:var(--body);
+  font-size:13px;
+  padding:7px 9px;
+  border:1px solid var(--rule);
+  border-radius:var(--radius);
+  background:#fff;
+  color:var(--ink);
+  min-width:170px;
+}
+.field input{min-width:230px}
+.spacer{flex:1}
+.btn{
+  font-family:var(--body);
+  font-size:12.5px;
+  font-weight:500;
+  padding:8px 14px;
+  border:1px solid var(--rule);
+  background:#fff;
+  color:var(--ink);
+  border-radius:var(--radius);
+  cursor:pointer;
+}
+.btn:hover{background:#F2F5F8;border-color:var(--muted)}
+.btn-primary{background:var(--band);border-color:var(--band);color:#fff}
+.btn-primary:hover{background:var(--band-2);border-color:var(--band-2)}
+
+/* ── KPI row ─────────────────────────────────────────────── */
+.kpis{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:var(--gap);
+  margin-bottom:var(--gap);
+}
+.kpi{
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-top:3px solid var(--band);
+  border-radius:var(--radius);
+  padding:15px 17px 16px;
+}
+.kpi.is-warn{border-top-color:var(--at-risk)}
+.kpi.is-bad{border-top-color:var(--stalled)}
+.kpi .k-label{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:9px;
+}
+.kpi .k-value{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:34px;
+  letter-spacing:-.03em;
+  line-height:1;
+}
+.kpi .k-value span{font-size:17px;font-weight:600;color:var(--muted);margin-left:2px}
+.kpi .k-note{font-size:12px;color:var(--muted);margin-top:8px}
+
+/* ── Panels ──────────────────────────────────────────────── */
+.panel{
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-radius:var(--radius);
+  padding:16px 18px 18px;
+  margin-bottom:var(--gap);
+}
+.p-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:4px}
+.p-title{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-.01em}
+.p-note{font-size:12px;color:var(--muted);max-width:62ch;margin-bottom:14px}
+.p-meta{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+.split{display:grid;grid-template-columns:1.35fr 1fr;gap:var(--gap)}
+.split .panel{margin-bottom:0}
+
+/* ── Legend ──────────────────────────────────────────────── */
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:1px;margin-right:5px;vertical-align:baseline}
+
+/* ── Pulse (signature) ───────────────────────────────────── */
+.pulse-shell{width:100%;overflow:visible}
+.pulse-shell svg{width:100%;height:auto;display:block}
+.tick{cursor:pointer}
+.tick rect{transition:opacity .12s ease}
+.pulse-shell:hover .tick rect{opacity:.42}
+.pulse-shell .tick:hover rect{opacity:1}
+.axis-line{stroke:var(--rule);stroke-width:1}
+.axis-text{font-family:var(--mono);font-size:10px;fill:var(--muted)}
+.thresh{stroke:var(--stalled);stroke-width:1;stroke-dasharray:3 3}
+.thresh-text{font-family:var(--mono);font-size:10px;fill:var(--stalled);font-weight:500}
+
+.readout{
+  margin-top:12px;
+  border-top:1px solid var(--rule-soft);
+  padding-top:11px;
+  min-height:44px;
+  font-size:13px;
+}
+.readout .r-empty{color:var(--muted);font-size:12.5px}
+.readout .r-id{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em}
+.readout .r-title{font-weight:600;display:block;margin:1px 0 3px}
+.readout .r-facts{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+
+/* ── Team bars ───────────────────────────────────────────── */
+.team-row{margin-bottom:11px}
+.team-row:last-child{margin-bottom:0}
+.team-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.team-name{font-size:12.5px;font-weight:500}
+.team-count{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.team-bar{display:flex;height:15px;border-radius:2px;overflow:hidden;background:var(--rule-soft)}
+.team-seg{height:100%}
+
+/* ── Table ───────────────────────────────────────────────── */
+.table-scroll{overflow-x:auto;border-top:1px solid var(--rule-soft);margin-top:2px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{
+  position:sticky;top:0;background:var(--card);
+  text-align:left;
+  padding:10px 11px;
+  border-bottom:1px solid var(--rule);
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+  white-space:nowrap;
+  cursor:pointer;
+  user-select:none;
+}
+thead th:hover{color:var(--ink)}
+thead th.num{text-align:right}
+thead th .arrow{opacity:.35;margin-left:4px}
+thead th.sorted .arrow{opacity:1;color:var(--band)}
+tbody td{padding:9px 11px;border-bottom:1px solid var(--rule-soft);vertical-align:middle}
+tbody td.num{text-align:right;font-family:var(--mono);font-size:12px}
+tbody td.id{font-family:var(--mono);font-size:11.5px;color:var(--muted);white-space:nowrap}
+tbody tr:hover{background:#F5F8FA}
+.t-title{font-weight:500}
+.t-sub{font-size:11.5px;color:var(--muted)}
+
+.pill{
+  display:inline-block;
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  padding:3px 7px;
+  border-radius:2px;
+  color:#fff;
+  white-space:nowrap;
+}
+.stale{font-family:var(--mono);font-size:12px}
+.stale.hot{color:var(--stalled);font-weight:600}
+
+.meter{display:flex;align-items:center;gap:7px;justify-content:flex-end}
+.meter-track{width:52px;height:5px;background:var(--rule-soft);border-radius:3px;overflow:hidden}
+.meter-fill{height:100%;background:var(--band)}
+
+.empty{padding:34px 0;text-align:center;color:var(--muted);font-size:13px}
+
+footer.foot{
+  margin-top:var(--gap);
+  font-size:12px;
+  color:var(--muted);
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
+footer.foot code{font-family:var(--mono);font-size:11.5px}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width:900px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .split{grid-template-columns:1fr}
+  .split .panel{margin-bottom:var(--gap)}
+}
+@media (max-width:560px){
+  .kpis{grid-template-columns:1fr 1fr}
+  .kpi .k-value{font-size:27px}
+  .field select,.field input{min-width:0;width:100%}
+  .field{width:100%}
+}
+
+@media print{
+  body{background:#fff}
+  .band{background:#fff;color:#000;border-bottom:2px solid #000;padding-top:0}
+  .band .eyebrow,.band .sub,.stamp{color:#444}
+  .stamp b{color:#000}
+  .controls,.btn{display:none}
+  .panel,.kpi{border:1px solid #999;break-inside:avoid}
+  .pulse-shell:hover .tick rect{opacity:1}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="band">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Program Management Office</div>
+      <h1>Portfolio Health</h1>
+      <p class="sub">Status is derived from movement, not self-report. Any initiative untouched for 30 days is marked stalled regardless of what its owner last set it to.</p>
+    </div>
+    <div class="stamp">
+      Snapshot <b id="stamp-date">—</b><br>
+      <span id="stamp-count">—</span> initiatives · 7 teams<br>
+      Synthetic data · no real records
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="controls">
+    <div class="field">
+      <label for="f-team">Team</label>
+      <select id="f-team"><option value="">All teams</option></select>
+    </div>
+    <div class="field">
+      <label for="f-status">Status</label>
+      <select id="f-status"><option value="">All statuses</option></select>
+    </div>
+    <div class="field">
+      <label for="f-workstream">Workstream</label>
+      <select id="f-workstream"><option value="">All workstreams</option></select>
+    </div>
+    <div class="field">
+      <label for="f-search">Search title or owner</label>
+      <input id="f-search" type="search" placeholder="e.g. roster, Okafor" autocomplete="off">
+    </div>
+    <div class="spacer"></div>
+    <button class="btn" id="btn-stalled" type="button">Show stalled only</button>
+    <button class="btn" id="btn-reset" type="button">Reset</button>
+    <button class="btn btn-primary" id="btn-print" type="button">Save as PDF</button>
+  </div>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="panel">
+    <div class="p-head">
+      <h2 class="p-title">Portfolio pulse — days since last movement</h2>
+      <div class="legend" id="legend"></div>
+    </div>
+    <p class="p-note">Every initiative is one mark, placed by how long it has sat untouched. Work drifting to the right is the work no one is asking about. Hover or tap a mark for detail.</p>
+    <div class="pulse-shell" id="pulse"></div>
+    <div class="readout" id="readout"><span class="r-empty">Hover a mark to inspect an initiative.</span></div>
+  </section>
+
+  <div class="split">
+    <section class="panel">
+      <div class="p-head">
+        <h2 class="p-title">Health by team</h2>
+        <span class="p-meta" id="team-meta"></span>
+      </div>
+      <p class="p-note">Sorted by share of work that is stalled or at risk — the teams that need a conversation appear first.</p>
+      <div id="teams"></div>
+    </section>
+
+    <section class="panel">
+      <div class="p-head">
+        <h2 class="p-title">Where the drift sits</h2>
+      </div>
+      <p class="p-note">Stalled and at-risk counts by workstream.</p>
+      <div id="workstreams"></div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <div class="p-head">
+      <h2 class="p-title">Initiative detail</h2>
+      <span class="p-meta" id="table-meta"></span>
+    </div>
+    <p class="p-note">Click any column header to sort. Defaults to longest-idle first.</p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th data-key="id">ID<span class="arrow">↕</span></th>
+            <th data-key="title">Initiative<span class="arrow">↕</span></th>
+            <th data-key="team">Team<span class="arrow">↕</span></th>
+            <th data-key="owner">Owner<span class="arrow">↕</span></th>
+            <th data-key="status">Status<span class="arrow">↕</span></th>
+            <th data-key="percent_complete" class="num">Complete<span class="arrow">↕</span></th>
+            <th data-key="due_date" class="num">Due<span class="arrow">↕</span></th>
+            <th data-key="days_since_update" class="num">Idle<span class="arrow">↕</span></th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="empty" id="empty" hidden>No initiatives match these filters.</div>
+  </section>
+
+  <footer class="foot">
+    <span>Single HTML file · no build step · no dependencies · open <code>index.html</code> in any browser.</span>
+    <span>Regenerate the dataset: <code>python data/generate_sample_data.py</code></span>
+  </footer>
+
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   Portfolio Health Dashboard
+   All data below is synthetic — see data/generate_sample_data.py
+   ───────────────────────────────────────────────────────────── */
+
+const AS_OF = "2026-06-30";
+const DATA = [{"id":"INI-001","title":"Pilot member contact preferences","team":"Member Experience","workstream":"Process Redesign","owner":"Natalie Ramnarine","status":"On Track","percent_complete":63,"start_date":"2026-04-03","due_date":"2026-08-01","last_update":"2026-06-30","days_since_update":0},{"id":"INI-002","title":"Streamline measure specification library for regional markets","team":"Member Experience","workstream":"Vendor Onboarding","owner":"Ravi Kowalski","status":"At Risk","percent_complete":92,"start_date":"2025-08-16","due_date":"2026-02-22","last_update":"2026-06-09","days_since_update":21},{"id":"INI-003","title":"Streamline lab result normalization (phase 2)","team":"Provider Engagement","workstream":"Compliance & Audit","owner":"Devin Novak","status":"On Track","percent_complete":45,"start_date":"2026-02-17","due_date":"2026-09-25","last_update":"2026-06-19","days_since_update":11},{"id":"INI-004","title":"Standardize intake validation across delegated partners","team":"Member Experience","workstream":"Outreach Campaign","owner":"Dana Novak","status":"Complete","percent_complete":100,"start_date":"2026-05-08","due_date":"2027-02-06","last_update":"2026-05-23","days_since_update":38},{"id":"INI-005","title":"Instrument measure specification library (phase 2)","team":"Care Management","workstream":"Data Integration","owner":"Devin Castellanos","status":"On Track","percent_complete":65,"start_date":"2026-03-15","due_date":"2026-09-03","last_update":"2026-06-08","days_since_update":22},{"id":"INI-006","title":"Streamline eligibility reconciliation for regional markets","team":"Analytics & Reporting","workstream":"Reporting & Insight","owner":"Hugo Castellanos","status":"Complete","percent_complete":100,"start_date":"2025-10-20","due_date":"2026-09-07","last_update":"2026-06-13","days_since_update":17},{"id":"INI-007","title":"Pilot intake validation ahead of annual audit","team":"Analytics & Reporting","workstream":"Reporting & Insight","owner":"Dana Novak","status":"At Risk","percent_complete":68,"start_date":"2025-08-20","due_date":"2026-04-18","last_update":"2026-06-23","days_since_update":7},{"id":"INI-008","title":"Retire chart retrieval workflow","team":"Care Management","workstream":"Gap Closure","owner":"Renee Okafor","status":"On Track","percent_complete":36,"start_date":"2025-12-19","due_date":"2026-08-18","last_update":"2026-06-13","days_since_update":17},{"id":"INI-009","title":"Expand campaign attribution (phase 2)","team":"Member Experience","workstream":"Data Integration","owner":"Marcus Delgado","status":"Complete","percent_complete":100,"start_date":"2025-10-25","due_date":"2026-03-29","last_update":"2026-05-19","days_since_update":42},{"id":"INI-010","title":"Standardize site-of-care analytics (phase 2)","team":"Provider Engagement","workstream":"Vendor Onboarding","owner":"Peter Ramnarine","status":"Complete","percent_complete":100,"start_date":"2025-11-11","due_date":"2026-05-28","last_update":"2026-06-23","days_since_update":7},{"id":"INI-011","title":"Streamline risk stratification inputs for the self-service layer","team":"Data Governance","workstream":"Reporting & Insight","owner":"Dana Kowalski","status":"At Risk","percent_complete":77,"start_date":"2025-08-19","due_date":"2026-05-04","last_update":"2026-06-29","days_since_update":1},{"id":"INI-012","title":"Standardize quality dashboard distribution for regional markets","team":"Provider Engagement","workstream":"Gap Closure","owner":"Dana Novak","status":"At Risk","percent_complete":63,"start_date":"2025-10-24","due_date":"2026-03-03","last_update":"2026-06-11","days_since_update":19},{"id":"INI-013","title":"Retire campaign attribution","team":"Provider Engagement","workstream":"Compliance & Audit","owner":"Grant Vasquez","status":"On Track","percent_complete":78,"start_date":"2025-08-25","due_date":"2026-08-23","last_update":"2026-06-26","days_since_update":4},{"id":"INI-014","title":"Automate risk stratification inputs for regional markets","team":"Member Experience","workstream":"Reporting & Insight","owner":"Simone Halloran","status":"Complete","percent_complete":100,"start_date":"2026-03-20","due_date":"2027-02-02","last_update":"2026-06-12","days_since_update":18},{"id":"INI-015","title":"Pilot care gap routing","team":"Provider Engagement","workstream":"Process Redesign","owner":"Elena Moreau","status":"On Track","percent_complete":20,"start_date":"2026-04-05","due_date":"2027-02-26","last_update":"2026-06-25","days_since_update":5},{"id":"INI-016","title":"Redesign roster ingestion (phase 2)","team":"Care Management","workstream":"Vendor Onboarding","owner":"Lena Adeyemi","status":"Stalled","percent_complete":10,"start_date":"2026-05-18","due_date":"2026-09-16","last_update":"2026-05-03","days_since_update":58},{"id":"INI-017","title":"Standardize provider scorecard refresh","team":"Analytics & Reporting","workstream":"Vendor Onboarding","owner":"Priya Sandoval","status":"Complete","percent_complete":100,"start_date":"2026-05-01","due_date":"2027-01-29","last_update":"2026-05-19","days_since_update":42},{"id":"INI-018","title":"Redesign vendor SLA tracking (phase 2)","team":"Provider Engagement","workstream":"Compliance & Audit","owner":"Omar Lindqvist","status":"Complete","percent_complete":100,"start_date":"2025-08-10","due_date":"2026-02-22","last_update":"2026-06-05","days_since_update":25},{"id":"INI-019","title":"Automate outreach scheduling (phase 2)","team":"Member Experience","workstream":"Vendor Onboarding","owner":"Grant Whitfield","status":"At Risk","percent_complete":97,"start_date":"2025-08-18","due_date":"2025-11-24","last_update":"2026-06-28","days_since_update":2},{"id":"INI-020","title":"Instrument chart retrieval workflow (phase 2)","team":"Provider Engagement","workstream":"Compliance & Audit","owner":"Ravi Novak","status":"Stalled","percent_complete":86,"start_date":"2025-09-16","due_date":"2026-05-23","last_update":"2026-04-03","days_since_update":88},{"id":"INI-021","title":"Redesign supplemental file submission","team":"Vendor & Delivery","workstream":"Process Redesign","owner":"Peter Sandoval","status":"On Track","percent_complete":33,"start_date":"2026-05-23","due_date":"2027-04-29","last_update":"2026-06-24","days_since_update":6},{"id":"INI-022","title":"Standardize lab result normalization","team":"Clinical Operations","workstream":"Gap Closure","owner":"Elena Okafor","status":"On Track","percent_complete":16,"start_date":"2026-06-16","due_date":"2026-09-27","last_update":"2026-06-19","days_since_update":11},{"id":"INI-023","title":"Redesign supplemental file submission ahead of annual audit","team":"Care Management","workstream":"Process Redesign","owner":"Omar Delgado","status":"On Track","percent_complete":28,"start_date":"2026-01-30","due_date":"2026-12-31","last_update":"2026-06-22","days_since_update":8},{"id":"INI-024","title":"Expand site-of-care analytics","team":"Provider Engagement","workstream":"Process Redesign","owner":"Tobias Tanaka","status":"On Track","percent_complete":97,"start_date":"2025-12-10","due_date":"2026-08-02","last_update":"2026-06-24","days_since_update":6},{"id":"INI-025","title":"Automate risk stratification inputs","team":"Vendor & Delivery","workstream":"Vendor Onboarding","owner":"Natalie Kowalski","status":"At Risk","percent_complete":80,"start_date":"2026-01-24","due_date":"2026-06-13","last_update":"2026-06-22","days_since_update":8},{"id":"INI-026","title":"Consolidate appeals turnaround reporting","team":"Data Governance","workstream":"Data Integration","owner":"Grant Novak","status":"Stalled","percent_complete":33,"start_date":"2026-01-03","due_date":"2026-12-28","last_update":"2026-05-23","days_since_update":38},{"id":"INI-027","title":"Expand chart retrieval workflow for regional markets","team":"Provider Engagement","workstream":"Data Integration","owner":"Hugo Tanaka","status":"At Risk","percent_complete":72,"start_date":"2026-01-09","due_date":"2026-05-01","last_update":"2026-06-29","days_since_update":1},{"id":"INI-028","title":"Redesign site-of-care analytics","team":"Data Governance","workstream":"Reporting & Insight","owner":"Grant Halloran","status":"At Risk","percent_complete":49,"start_date":"2025-10-19","due_date":"2026-04-01","last_update":"2026-06-25","days_since_update":5},{"id":"INI-029","title":"Expand supplemental file submission (phase 2)","team":"Care Management","workstream":"Data Integration","owner":"Grant Kowalski","status":"Stalled","percent_complete":89,"start_date":"2025-09-09","due_date":"2026-05-16","last_update":"2026-05-10","days_since_update":51},{"id":"INI-030","title":"Instrument vendor SLA tracking for regional markets","team":"Vendor & Delivery","workstream":"Reporting & Insight","owner":"Natalie Castellanos","status":"On Track","percent_complete":65,"start_date":"2026-03-02","due_date":"2026-11-19","last_update":"2026-06-23","days_since_update":7},{"id":"INI-031","title":"Consolidate member contact preferences ahead of annual audit","team":"Data Governance","workstream":"Reporting & Insight","owner":"Omar Ferreira","status":"Stalled","percent_complete":56,"start_date":"2025-11-24","due_date":"2026-09-18","last_update":"2026-05-19","days_since_update":42},{"id":"INI-032","title":"Redesign site-of-care analytics","team":"Provider Engagement","workstream":"Process Redesign","owner":"Devin Vasquez","status":"On Track","percent_complete":84,"start_date":"2025-10-18","due_date":"2026-07-23","last_update":"2026-06-29","days_since_update":1},{"id":"INI-033","title":"Pilot campaign attribution for the self-service layer","team":"Member Experience","workstream":"Gap Closure","owner":"Hugo Kowalski","status":"Stalled","percent_complete":18,"start_date":"2026-03-15","due_date":"2026-09-12","last_update":"2026-03-31","days_since_update":91},{"id":"INI-034","title":"Streamline provider scorecard refresh (phase 2)","team":"Member Experience","workstream":"Reporting & Insight","owner":"Lena Lindqvist","status":"On Track","percent_complete":67,"start_date":"2026-02-19","due_date":"2026-09-30","last_update":"2026-06-24","days_since_update":6},{"id":"INI-035","title":"Streamline chart retrieval workflow","team":"Vendor & Delivery","workstream":"Data Integration","owner":"Claire Okafor","status":"Stalled","percent_complete":39,"start_date":"2026-01-31","due_date":"2026-07-01","last_update":"2026-03-06","days_since_update":116},{"id":"INI-036","title":"Instrument care gap routing for the self-service layer","team":"Care Management","workstream":"Vendor Onboarding","owner":"Dana Ramnarine","status":"On Track","percent_complete":7,"start_date":"2026-04-18","due_date":"2027-04-30","last_update":"2026-06-05","days_since_update":25},{"id":"INI-037","title":"Streamline chart retrieval workflow","team":"Analytics & Reporting","workstream":"Data Integration","owner":"Lena Halloran","status":"Stalled","percent_complete":78,"start_date":"2025-09-14","due_date":"2026-04-08","last_update":"2026-05-28","days_since_update":33},{"id":"INI-038","title":"Migrate appeals turnaround reporting","team":"Data Governance","workstream":"Data Integration","owner":"Priya Moreau","status":"Complete","percent_complete":100,"start_date":"2026-04-20","due_date":"2027-02-24","last_update":"2026-05-22","days_since_update":39},{"id":"INI-039","title":"Retire roster ingestion for the self-service layer","team":"Analytics & Reporting","workstream":"Compliance & Audit","owner":"Elena Ferreira","status":"Stalled","percent_complete":65,"start_date":"2025-11-20","due_date":"2026-07-20","last_update":"2026-04-25","days_since_update":66},{"id":"INI-040","title":"Redesign lab result normalization for regional markets","team":"Member Experience","workstream":"Outreach Campaign","owner":"Marcus Whitfield","status":"On Track","percent_complete":23,"start_date":"2026-05-12","due_date":"2026-10-19","last_update":"2026-06-19","days_since_update":11},{"id":"INI-041","title":"Instrument audit evidence collection","team":"Analytics & Reporting","workstream":"Reporting & Insight","owner":"Tobias Boateng","status":"Stalled","percent_complete":84,"start_date":"2026-02-08","due_date":"2026-08-16","last_update":"2026-05-07","days_since_update":54},{"id":"INI-042","title":"Instrument supplemental file submission ahead of annual audit","team":"Provider Engagement","workstream":"Data Integration","owner":"Marcus Adeyemi","status":"Stalled","percent_complete":32,"start_date":"2026-04-28","due_date":"2026-09-02","last_update":"2026-03-13","days_since_update":109},{"id":"INI-043","title":"Expand outreach scheduling across delegated partners","team":"Provider Engagement","workstream":"Gap Closure","owner":"Tobias Castellanos","status":"On Track","percent_complete":23,"start_date":"2026-02-07","due_date":"2027-01-07","last_update":"2026-06-09","days_since_update":21},{"id":"INI-044","title":"Migrate campaign attribution for the self-service layer","team":"Member Experience","workstream":"Outreach Campaign","owner":"Priya Sandoval","status":"Complete","percent_complete":100,"start_date":"2026-06-02","due_date":"2026-10-08","last_update":"2026-05-22","days_since_update":39},{"id":"INI-045","title":"Migrate campaign attribution for the self-service layer","team":"Data Governance","workstream":"Gap Closure","owner":"Grant Lindqvist","status":"Complete","percent_complete":100,"start_date":"2026-01-06","due_date":"2026-11-16","last_update":"2026-05-21","days_since_update":40},{"id":"INI-046","title":"Consolidate site-of-care analytics (phase 2)","team":"Vendor & Delivery","workstream":"Process Redesign","owner":"Ravi Adeyemi","status":"Complete","percent_complete":100,"start_date":"2026-01-01","due_date":"2026-05-25","last_update":"2026-05-29","days_since_update":32},{"id":"INI-047","title":"Standardize appeals turnaround reporting","team":"Clinical Operations","workstream":"Data Integration","owner":"Aisha Lindqvist","status":"On Track","percent_complete":30,"start_date":"2026-06-01","due_date":"2027-03-07","last_update":"2026-06-21","days_since_update":9},{"id":"INI-048","title":"Instrument chart retrieval workflow ahead of annual audit","team":"Clinical Operations","workstream":"Process Redesign","owner":"Aisha Okafor","status":"Complete","percent_complete":100,"start_date":"2025-10-12","due_date":"2026-09-29","last_update":"2026-05-26","days_since_update":35},{"id":"INI-049","title":"Retire campaign attribution for regional markets","team":"Provider Engagement","workstream":"Outreach Campaign","owner":"Tobias Moreau","status":"At Risk","percent_complete":59,"start_date":"2025-09-22","due_date":"2026-05-16","last_update":"2026-06-23","days_since_update":7},{"id":"INI-050","title":"Instrument campaign attribution","team":"Provider Engagement","workstream":"Reporting & Insight","owner":"Natalie Tanaka","status":"On Track","percent_complete":48,"start_date":"2025-12-04","due_date":"2026-10-03","last_update":"2026-06-29","days_since_update":1},{"id":"INI-051","title":"Automate eligibility reconciliation","team":"Vendor & Delivery","workstream":"Reporting & Insight","owner":"Lena Sandoval","status":"On Track","percent_complete":81,"start_date":"2025-12-02","due_date":"2026-08-04","last_update":"2026-06-25","days_since_update":5},{"id":"INI-052","title":"Standardize vendor SLA tracking across delegated partners","team":"Data Governance","workstream":"Reporting & Insight","owner":"Ravi Boateng","status":"Complete","percent_complete":100,"start_date":"2025-09-14","due_date":"2026-07-04","last_update":"2026-05-26","days_since_update":35},{"id":"INI-053","title":"Standardize audit evidence collection","team":"Data Governance","workstream":"Gap Closure","owner":"Claire Moreau","status":"Complete","percent_complete":100,"start_date":"2025-11-28","due_date":"2026-11-15","last_update":"2026-06-07","days_since_update":23},{"id":"INI-054","title":"Standardize vendor SLA tracking ahead of annual audit","team":"Clinical Operations","workstream":"Data Integration","owner":"Elena Lindqvist","status":"On Track","percent_complete":28,"start_date":"2026-05-13","due_date":"2027-03-30","last_update":"2026-06-05","days_since_update":25},{"id":"INI-055","title":"Consolidate site-of-care analytics","team":"Vendor & Delivery","workstream":"Vendor Onboarding","owner":"Dana Lindqvist","status":"On Track","percent_complete":53,"start_date":"2026-03-30","due_date":"2026-10-06","last_update":"2026-06-28","days_since_update":2},{"id":"INI-056","title":"Retire member contact preferences for regional markets","team":"Provider Engagement","workstream":"Compliance & Audit","owner":"Claire Moreau","status":"At Risk","percent_complete":81,"start_date":"2025-08-31","due_date":"2026-04-16","last_update":"2026-06-10","days_since_update":20},{"id":"INI-057","title":"Migrate audit evidence collection","team":"Care Management","workstream":"Process Redesign","owner":"Aisha Boateng","status":"Complete","percent_complete":100,"start_date":"2025-10-25","due_date":"2026-02-25","last_update":"2026-06-09","days_since_update":21},{"id":"INI-058","title":"Consolidate care gap routing for regional markets","team":"Vendor & Delivery","workstream":"Data Integration","owner":"Renee Boateng","status":"Complete","percent_complete":100,"start_date":"2026-01-16","due_date":"2026-06-21","last_update":"2026-06-17","days_since_update":13},{"id":"INI-059","title":"Consolidate lab result normalization for the self-service layer","team":"Clinical Operations","workstream":"Compliance & Audit","owner":"Claire Boateng","status":"On Track","percent_complete":64,"start_date":"2026-02-21","due_date":"2027-02-09","last_update":"2026-06-28","days_since_update":2},{"id":"INI-060","title":"Redesign provider scorecard refresh for the self-service layer","team":"Member Experience","workstream":"Vendor Onboarding","owner":"Claire Delgado","status":"At Risk","percent_complete":97,"start_date":"2025-12-21","due_date":"2026-05-19","last_update":"2026-06-28","days_since_update":2},{"id":"INI-061","title":"Consolidate supplemental file submission for the self-service layer","team":"Provider Engagement","workstream":"Compliance & Audit","owner":"Aisha Lindqvist","status":"On Track","percent_complete":39,"start_date":"2026-02-23","due_date":"2026-10-28","last_update":"2026-06-27","days_since_update":3},{"id":"INI-062","title":"Retire quality dashboard distribution for the self-service layer","team":"Care Management","workstream":"Gap Closure","owner":"Tobias Okafor","status":"At Risk","percent_complete":97,"start_date":"2025-12-29","due_date":"2026-05-29","last_update":"2026-06-22","days_since_update":8},{"id":"INI-063","title":"Instrument roster ingestion","team":"Vendor & Delivery","workstream":"Compliance & Audit","owner":"Peter Sandoval","status":"At Risk","percent_complete":60,"start_date":"2025-09-25","due_date":"2026-02-06","last_update":"2026-06-15","days_since_update":15},{"id":"INI-064","title":"Retire vendor SLA tracking (phase 2)","team":"Vendor & Delivery","workstream":"Gap Closure","owner":"Bea Adeyemi","status":"Stalled","percent_complete":88,"start_date":"2025-12-02","due_date":"2026-08-13","last_update":"2026-05-31","days_since_update":30},{"id":"INI-065","title":"Instrument member contact preferences (phase 2)","team":"Clinical Operations","workstream":"Reporting & Insight","owner":"Bea Novak","status":"Complete","percent_complete":100,"start_date":"2026-02-05","due_date":"2026-11-09","last_update":"2026-05-23","days_since_update":38},{"id":"INI-066","title":"Standardize lab result normalization for the self-service layer","team":"Clinical Operations","workstream":"Outreach Campaign","owner":"Marcus Boateng","status":"On Track","percent_complete":14,"start_date":"2026-03-13","due_date":"2027-02-26","last_update":"2026-06-29","days_since_update":1},{"id":"INI-067","title":"Automate intake validation for the self-service layer","team":"Analytics & Reporting","workstream":"Compliance & Audit","owner":"Claire Sandoval","status":"Stalled","percent_complete":38,"start_date":"2026-04-21","due_date":"2027-04-05","last_update":"2026-05-04","days_since_update":57},{"id":"INI-068","title":"Expand measure specification library for regional markets","team":"Analytics & Reporting","workstream":"Vendor Onboarding","owner":"Lena Halloran","status":"Stalled","percent_complete":13,"start_date":"2026-02-11","due_date":"2027-02-23","last_update":"2026-05-24","days_since_update":37},{"id":"INI-069","title":"Instrument vendor SLA tracking ahead of annual audit","team":"Clinical Operations","workstream":"Vendor Onboarding","owner":"Lena Vasquez","status":"On Track","percent_complete":84,"start_date":"2025-10-10","due_date":"2026-10-15","last_update":"2026-06-15","days_since_update":15},{"id":"INI-070","title":"Instrument member contact preferences (phase 2)","team":"Vendor & Delivery","workstream":"Reporting & Insight","owner":"Natalie Moreau","status":"At Risk","percent_complete":93,"start_date":"2025-11-15","due_date":"2026-05-10","last_update":"2026-06-23","days_since_update":7},{"id":"INI-071","title":"Pilot care gap routing for the self-service layer","team":"Provider Engagement","workstream":"Process Redesign","owner":"Dana Boateng","status":"At Risk","percent_complete":67,"start_date":"2025-09-07","due_date":"2026-02-15","last_update":"2026-06-29","days_since_update":1},{"id":"INI-072","title":"Redesign provider scorecard refresh (phase 2)","team":"Clinical Operations","workstream":"Compliance & Audit","owner":"Elena Delgado","status":"Stalled","percent_complete":96,"start_date":"2025-08-22","due_date":"2026-07-22","last_update":"2026-04-25","days_since_update":66},{"id":"INI-073","title":"Streamline intake validation for the self-service layer","team":"Analytics & Reporting","workstream":"Reporting & Insight","owner":"Peter Castellanos","status":"On Track","percent_complete":60,"start_date":"2026-03-24","due_date":"2026-07-26","last_update":"2026-06-21","days_since_update":9},{"id":"INI-074","title":"Pilot member contact preferences (phase 2)","team":"Data Governance","workstream":"Reporting & Insight","owner":"Peter Halloran","status":"On Track","percent_complete":15,"start_date":"2026-03-25","due_date":"2027-02-23","last_update":"2026-06-25","days_since_update":5},{"id":"INI-075","title":"Consolidate appeals turnaround reporting for the self-service layer","team":"Vendor & Delivery","workstream":"Data Integration","owner":"Omar Moreau","status":"At Risk","percent_complete":97,"start_date":"2025-10-25","due_date":"2026-05-25","last_update":"2026-06-17","days_since_update":13},{"id":"INI-076","title":"Streamline outreach scheduling ahead of annual audit","team":"Member Experience","workstream":"Process Redesign","owner":"Omar Okafor","status":"Stalled","percent_complete":20,"start_date":"2026-04-11","due_date":"2027-02-26","last_update":"2026-04-04","days_since_update":87},{"id":"INI-077","title":"Instrument measure specification library","team":"Provider Engagement","workstream":"Gap Closure","owner":"Lena Whitfield","status":"Complete","percent_complete":100,"start_date":"2026-01-20","due_date":"2026-10-10","last_update":"2026-05-22","days_since_update":39},{"id":"INI-078","title":"Streamline provider scorecard refresh","team":"Analytics & Reporting","workstream":"Data Integration","owner":"Omar Castellanos","status":"On Track","percent_complete":83,"start_date":"2026-04-14","due_date":"2026-07-14","last_update":"2026-06-20","days_since_update":10},{"id":"INI-079","title":"Streamline member contact preferences","team":"Provider Engagement","workstream":"Compliance & Audit","owner":"Aisha Adeyemi","status":"Stalled","percent_complete":58,"start_date":"2025-11-03","due_date":"2026-09-15","last_update":"2026-05-27","days_since_update":34},{"id":"INI-080","title":"Standardize care gap routing ahead of annual audit","team":"Clinical Operations","workstream":"Reporting & Insight","owner":"Devin Lindqvist","status":"Stalled","percent_complete":97,"start_date":"2025-08-16","due_date":"2025-11-25","last_update":"2026-05-18","days_since_update":43},{"id":"INI-081","title":"Redesign measure specification library","team":"Member Experience","workstream":"Reporting & Insight","owner":"Renee Vasquez","status":"At Risk","percent_complete":92,"start_date":"2025-08-28","due_date":"2026-03-07","last_update":"2026-06-13","days_since_update":17},{"id":"INI-082","title":"Pilot vendor SLA tracking","team":"Member Experience","workstream":"Reporting & Insight","owner":"Marcus Novak","status":"Complete","percent_complete":100,"start_date":"2025-08-04","due_date":"2025-11-04","last_update":"2026-05-21","days_since_update":40},{"id":"INI-083","title":"Instrument intake validation (phase 2)","team":"Member Experience","workstream":"Gap Closure","owner":"Dana Okafor","status":"At Risk","percent_complete":90,"start_date":"2025-10-20","due_date":"2026-04-02","last_update":"2026-06-08","days_since_update":22},{"id":"INI-084","title":"Redesign roster ingestion","team":"Analytics & Reporting","workstream":"Outreach Campaign","owner":"Bea Vasquez","status":"On Track","percent_complete":23,"start_date":"2026-06-11","due_date":"2026-12-19","last_update":"2026-06-19","days_since_update":11},{"id":"INI-085","title":"Standardize roster ingestion","team":"Analytics & Reporting","workstream":"Compliance & Audit","owner":"Tobias Halloran","status":"At Risk","percent_complete":66,"start_date":"2026-02-18","due_date":"2026-06-14","last_update":"2026-06-26","days_since_update":4},{"id":"INI-086","title":"Redesign measure specification library ahead of annual audit","team":"Analytics & Reporting","workstream":"Data Integration","owner":"Hugo Boateng","status":"On Track","percent_complete":77,"start_date":"2025-10-19","due_date":"2026-07-12","last_update":"2026-06-06","days_since_update":24},{"id":"INI-087","title":"Redesign risk stratification inputs across delegated partners","team":"Clinical Operations","workstream":"Gap Closure","owner":"Omar Lindqvist","status":"On Track","percent_complete":6,"start_date":"2026-04-27","due_date":"2026-12-30","last_update":"2026-06-25","days_since_update":5},{"id":"INI-088","title":"Expand member contact preferences ahead of annual audit","team":"Member Experience","workstream":"Data Integration","owner":"Dana Delgado","status":"Stalled","percent_complete":72,"start_date":"2025-09-05","due_date":"2026-01-30","last_update":"2026-03-23","days_since_update":99},{"id":"INI-089","title":"Retire site-of-care analytics","team":"Analytics & Reporting","workstream":"Data Integration","owner":"Renee Vasquez","status":"At Risk","percent_complete":64,"start_date":"2025-11-20","due_date":"2026-03-08","last_update":"2026-06-26","days_since_update":4},{"id":"INI-090","title":"Pilot member contact preferences (phase 2)","team":"Clinical Operations","workstream":"Compliance & Audit","owner":"Bea Novak","status":"Complete","percent_complete":100,"start_date":"2025-12-09","due_date":"2026-06-17","last_update":"2026-06-26","days_since_update":4},{"id":"INI-091","title":"Retire eligibility reconciliation (phase 2)","team":"Provider Engagement","workstream":"Outreach Campaign","owner":"Simone Boateng","status":"Complete","percent_complete":100,"start_date":"2025-09-26","due_date":"2026-10-01","last_update":"2026-06-09","days_since_update":21},{"id":"INI-092","title":"Instrument measure specification library","team":"Provider Engagement","workstream":"Outreach Campaign","owner":"Tobias Adeyemi","status":"Stalled","percent_complete":92,"start_date":"2025-08-06","due_date":"2026-02-06","last_update":"2026-05-30","days_since_update":31},{"id":"INI-093","title":"Automate lab result normalization for regional markets","team":"Clinical Operations","workstream":"Data Integration","owner":"Priya Boateng","status":"Stalled","percent_complete":41,"start_date":"2026-02-06","due_date":"2026-08-27","last_update":"2026-05-10","days_since_update":51},{"id":"INI-094","title":"Standardize measure specification library","team":"Analytics & Reporting","workstream":"Data Integration","owner":"Renee Whitfield","status":"At Risk","percent_complete":60,"start_date":"2025-10-23","due_date":"2026-07-14","last_update":"2026-06-20","days_since_update":10},{"id":"INI-095","title":"Redesign appeals turnaround reporting","team":"Clinical Operations","workstream":"Data Integration","owner":"Bea Moreau","status":"On Track","percent_complete":9,"start_date":"2026-05-22","due_date":"2027-03-08","last_update":"2026-06-22","days_since_update":8},{"id":"INI-096","title":"Automate outreach scheduling","team":"Care Management","workstream":"Vendor Onboarding","owner":"Elena Kowalski","status":"On Track","percent_complete":82,"start_date":"2025-09-18","due_date":"2026-08-16","last_update":"2026-06-30","days_since_update":0},{"id":"INI-097","title":"Consolidate vendor SLA tracking for regional markets","team":"Member Experience","workstream":"Vendor Onboarding","owner":"Renee Boateng","status":"On Track","percent_complete":52,"start_date":"2026-03-11","due_date":"2026-08-22","last_update":"2026-06-19","days_since_update":11},{"id":"INI-098","title":"Automate quality dashboard distribution (phase 2)","team":"Clinical Operations","workstream":"Vendor Onboarding","owner":"Claire Delgado","status":"Stalled","percent_complete":38,"start_date":"2026-03-31","due_date":"2027-02-22","last_update":"2026-05-31","days_since_update":30},{"id":"INI-099","title":"Retire measure specification library","team":"Provider Engagement","workstream":"Vendor Onboarding","owner":"Ravi Novak","status":"Stalled","percent_complete":42,"start_date":"2025-09-05","due_date":"2026-09-05","last_update":"2026-05-04","days_since_update":57},{"id":"INI-100","title":"Consolidate measure specification library for regional markets","team":"Analytics & Reporting","workstream":"Gap Closure","owner":"Marcus Sandoval","status":"On Track","percent_complete":66,"start_date":"2025-11-02","due_date":"2026-11-02","last_update":"2026-06-23","days_since_update":7},{"id":"INI-101","title":"Standardize chart retrieval workflow across delegated partners","team":"Care Management","workstream":"Outreach Campaign","owner":"Lena Halloran","status":"On Track","percent_complete":80,"start_date":"2025-08-20","due_date":"2026-07-01","last_update":"2026-06-26","days_since_update":4},{"id":"INI-102","title":"Standardize measure specification library ahead of annual audit","team":"Analytics & Reporting","workstream":"Outreach Campaign","owner":"Devin Okafor","status":"Stalled","percent_complete":11,"start_date":"2026-06-08","due_date":"2026-11-14","last_update":"2026-04-04","days_since_update":87},{"id":"INI-103","title":"Streamline outreach scheduling (phase 2)","team":"Data Governance","workstream":"Compliance & Audit","owner":"Tobias Ferreira","status":"At Risk","percent_complete":39,"start_date":"2025-08-11","due_date":"2026-07-06","last_update":"2026-06-30","days_since_update":0},{"id":"INI-104","title":"Streamline roster ingestion for the self-service layer","team":"Member Experience","workstream":"Gap Closure","owner":"Simone Kowalski","status":"On Track","percent_complete":21,"start_date":"2026-06-06","due_date":"2027-03-31","last_update":"2026-06-23","days_since_update":7},{"id":"INI-105","title":"Automate supplemental file submission for regional markets","team":"Data Governance","workstream":"Process Redesign","owner":"Marcus Tanaka","status":"On Track","percent_complete":23,"start_date":"2026-05-23","due_date":"2027-03-05","last_update":"2026-06-26","days_since_update":4},{"id":"INI-106","title":"Migrate eligibility reconciliation ahead of annual audit","team":"Vendor & Delivery","workstream":"Compliance & Audit","owner":"Dana Kowalski","status":"On Track","percent_complete":71,"start_date":"2025-12-27","due_date":"2026-10-09","last_update":"2026-06-16","days_since_update":14},{"id":"INI-107","title":"Standardize eligibility reconciliation ahead of annual audit","team":"Provider Engagement","workstream":"Reporting & Insight","owner":"Claire Sandoval","status":"Stalled","percent_complete":70,"start_date":"2025-09-30","due_date":"2026-07-18","last_update":"2026-04-19","days_since_update":72},{"id":"INI-108","title":"Streamline audit evidence collection","team":"Clinical Operations","workstream":"Compliance & Audit","owner":"Priya Tanaka","status":"On Track","percent_complete":70,"start_date":"2025-09-25","due_date":"2026-07-24","last_update":"2026-06-28","days_since_update":2},{"id":"INI-109","title":"Pilot quality dashboard distribution for regional markets","team":"Care Management","workstream":"Compliance & Audit","owner":"Claire Delgado","status":"Stalled","percent_complete":95,"start_date":"2026-02-03","due_date":"2026-09-08","last_update":"2026-05-08","days_since_update":53},{"id":"INI-110","title":"Migrate supplemental file submission for regional markets","team":"Member Experience","workstream":"Reporting & Insight","owner":"Natalie Delgado","status":"On Track","percent_complete":61,"start_date":"2025-12-20","due_date":"2026-10-20","last_update":"2026-06-18","days_since_update":12},{"id":"INI-111","title":"Retire provider scorecard refresh ahead of annual audit","team":"Analytics & Reporting","workstream":"Gap Closure","owner":"Claire Sandoval","status":"On Track","percent_complete":31,"start_date":"2026-06-05","due_date":"2027-04-10","last_update":"2026-06-20","days_since_update":10},{"id":"INI-112","title":"Expand measure specification library ahead of annual audit","team":"Care Management","workstream":"Process Redesign","owner":"Marcus Delgado","status":"Complete","percent_complete":100,"start_date":"2025-09-18","due_date":"2026-07-01","last_update":"2026-05-24","days_since_update":37},{"id":"INI-113","title":"Instrument risk stratification inputs for regional markets","team":"Data Governance","workstream":"Reporting & Insight","owner":"Lena Lindqvist","status":"On Track","percent_complete":40,"start_date":"2026-04-16","due_date":"2026-12-23","last_update":"2026-06-27","days_since_update":3},{"id":"INI-114","title":"Expand campaign attribution","team":"Care Management","workstream":"Gap Closure","owner":"Renee Delgado","status":"At Risk","percent_complete":97,"start_date":"2025-09-01","due_date":"2026-02-24","last_update":"2026-06-23","days_since_update":7},{"id":"INI-115","title":"Pilot care gap routing (phase 2)","team":"Vendor & Delivery","workstream":"Gap Closure","owner":"Hugo Okafor","status":"On Track","percent_complete":31,"start_date":"2026-02-02","due_date":"2026-12-30","last_update":"2026-06-20","days_since_update":10},{"id":"INI-116","title":"Pilot quality dashboard distribution for regional markets","team":"Analytics & Reporting","workstream":"Reporting & Insight","owner":"Marcus Castellanos","status":"At Risk","percent_complete":93,"start_date":"2025-08-17","due_date":"2026-06-04","last_update":"2026-06-27","days_since_update":3},{"id":"INI-117","title":"Automate site-of-care analytics (phase 2)","team":"Provider Engagement","workstream":"Reporting & Insight","owner":"Marcus Adeyemi","status":"On Track","percent_complete":31,"start_date":"2026-03-27","due_date":"2027-01-13","last_update":"2026-06-16","days_since_update":14},{"id":"INI-118","title":"Pilot quality dashboard distribution","team":"Clinical Operations","workstream":"Vendor Onboarding","owner":"Devin Moreau","status":"Stalled","percent_complete":97,"start_date":"2025-08-23","due_date":"2026-06-23","last_update":"2026-03-19","days_since_update":103},{"id":"INI-119","title":"Migrate supplemental file submission for the self-service layer","team":"Provider Engagement","workstream":"Outreach Campaign","owner":"Elena Whitfield","status":"On Track","percent_complete":43,"start_date":"2025-12-15","due_date":"2026-11-26","last_update":"2026-06-21","days_since_update":9},{"id":"INI-120","title":"Pilot measure specification library across delegated partners","team":"Clinical Operations","workstream":"Process Redesign","owner":"Omar Tanaka","status":"On Track","percent_complete":52,"start_date":"2026-05-24","due_date":"2026-11-08","last_update":"2026-06-23","days_since_update":7},{"id":"INI-121","title":"Expand campaign attribution","team":"Vendor & Delivery","workstream":"Reporting & Insight","owner":"Grant Ramnarine","status":"Stalled","percent_complete":64,"start_date":"2025-12-31","due_date":"2026-04-24","last_update":"2026-05-12","days_since_update":49},{"id":"INI-122","title":"Automate provider scorecard refresh for the self-service layer","team":"Clinical Operations","workstream":"Gap Closure","owner":"Dana Ramnarine","status":"Stalled","percent_complete":64,"start_date":"2026-03-21","due_date":"2026-07-19","last_update":"2026-05-18","days_since_update":43},{"id":"INI-123","title":"Migrate member contact preferences ahead of annual audit","team":"Vendor & Delivery","workstream":"Compliance & Audit","owner":"Natalie Boateng","status":"On Track","percent_complete":81,"start_date":"2025-10-27","due_date":"2026-08-23","last_update":"2026-06-21","days_since_update":9},{"id":"INI-124","title":"Retire provider scorecard refresh across delegated partners","team":"Vendor & Delivery","workstream":"Compliance & Audit","owner":"Elena Ramnarine","status":"Complete","percent_complete":100,"start_date":"2025-12-01","due_date":"2026-04-20","last_update":"2026-06-11","days_since_update":19},{"id":"INI-125","title":"Standardize provider scorecard refresh","team":"Data Governance","workstream":"Gap Closure","owner":"Natalie Okafor","status":"On Track","percent_complete":29,"start_date":"2025-11-25","due_date":"2026-11-29","last_update":"2026-06-20","days_since_update":10},{"id":"INI-126","title":"Standardize audit evidence collection for regional markets","team":"Clinical Operations","workstream":"Process Redesign","owner":"Natalie Boateng","status":"Complete","percent_complete":100,"start_date":"2025-10-22","due_date":"2026-05-29","last_update":"2026-06-14","days_since_update":16},{"id":"INI-127","title":"Redesign quality dashboard distribution (phase 2)","team":"Provider Engagement","workstream":"Reporting & Insight","owner":"Elena Whitfield","status":"Complete","percent_complete":100,"start_date":"2026-05-23","due_date":"2026-12-27","last_update":"2026-05-16","days_since_update":45},{"id":"INI-128","title":"Standardize member contact preferences","team":"Analytics & Reporting","workstream":"Reporting & Insight","owner":"Dana Castellanos","status":"On Track","percent_complete":0,"start_date":"2026-05-12","due_date":"2027-01-24","last_update":"2026-06-25","days_since_update":5}];
+
+const STATUSES = ["On Track", "At Risk", "Stalled", "Complete"];
+const COLOR = {
+  "On Track": "#0F766E",
+  "At Risk":  "#B45309",
+  "Stalled":  "#9F1239",
+  "Complete": "#64748B"
+};
+const STALL_DAYS = 30;
+
+const state = {
+  team: "", status: "", workstream: "", search: "",
+  sortKey: "days_since_update", sortDir: "desc"
+};
+
+const $ = id => document.getElementById(id);
+const uniq = key => [...new Set(DATA.map(r => r[key]))].sort();
+const fmtDate = iso => {
+  const [y, m, d] = iso.split("-");
+  return `${["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][+m - 1]} ${+d} ${y.slice(2)}`;
+};
+const daysToDue = iso =>
+  Math.round((new Date(iso + "T00:00:00") - new Date(AS_OF + "T00:00:00")) / 864e5);
+
+/* ── Filtering ───────────────────────────────────────────── */
+function visible() {
+  const q = state.search.trim().toLowerCase();
+  return DATA.filter(r =>
+    (!state.team || r.team === state.team) &&
+    (!state.status || r.status === state.status) &&
+    (!state.workstream || r.workstream === state.workstream) &&
+    (!q || r.title.toLowerCase().includes(q) || r.owner.toLowerCase().includes(q) ||
+      r.id.toLowerCase().includes(q))
+  );
+}
+
+/* ── KPIs ────────────────────────────────────────────────── */
+function renderKPIs(rows) {
+  const total = rows.length;
+  const open = rows.filter(r => r.status !== "Complete");
+  const stalled = rows.filter(r => r.status === "Stalled");
+  const atRisk = rows.filter(r => r.status === "At Risk");
+  const onTrack = rows.filter(r => r.status === "On Track");
+  const overdue = open.filter(r => daysToDue(r.due_date) < 0);
+  const medianIdle = median(open.map(r => r.days_since_update));
+
+  const healthy = open.length ? Math.round(100 * onTrack.length / open.length) : 0;
+
+  const cards = [
+    { label: "Active initiatives", value: total, note:
+      `${open.length} open · ${total - open.length} closed`, tone: "" },
+    { label: "On track", value: healthy, suffix: "%", note:
+      `${onTrack.length} of ${open.length} open initiatives`, tone: "" },
+    { label: "Stalled ≥ 30 days", value: stalled.length, note:
+      `${atRisk.length} more at risk`, tone: stalled.length ? "is-bad" : "" },
+    { label: "Median days idle", value: medianIdle, note:
+      `${overdue.length} open initiatives past due`, tone: medianIdle >= 14 ? "is-warn" : "" }
+  ];
+
+  $("kpis").innerHTML = cards.map(c => `
+    <div class="kpi ${c.tone}">
+      <div class="k-label">${c.label}</div>
+      <div class="k-value">${c.value}${c.suffix ? `<span>${c.suffix}</span>` : ""}</div>
+      <div class="k-note">${c.note}</div>
+    </div>`).join("");
+}
+
+function median(arr) {
+  if (!arr.length) return 0;
+  const s = [...arr].sort((a, b) => a - b);
+  const m = s.length >> 1;
+  return s.length % 2 ? s[m] : Math.round((s[m - 1] + s[m]) / 2);
+}
+
+/* ── Signature: the pulse strip ──────────────────────────── */
+function renderPulse(rows) {
+  const W = 1000, PAD_L = 8, PAD_R = 8, AXIS_H = 30;
+  const MAX = 120;
+  const TICK_W = 5, TICK_H = 9, STACK_GAP = 2;
+
+  const plotW = W - PAD_L - PAD_R;
+  const x = d => PAD_L + (Math.min(d, MAX) / MAX) * plotW;
+
+  // Beeswarm: bucket by pixel column, stack upward within each bucket.
+  const buckets = new Map();
+  const placed = [];
+  const sorted = [...rows].sort((a, b) => a.days_since_update - b.days_since_update);
+
+  for (const r of sorted) {
+    const px = x(r.days_since_update);
+    const key = Math.round(px / (TICK_W + 1));
+    const level = buckets.get(key) || 0;
+    buckets.set(key, level + 1);
+    placed.push({ r, px, level });
+  }
+
+  const maxLevel = Math.max(1, ...buckets.values());
+  const plotH = maxLevel * (TICK_H + STACK_GAP) + 12;
+  const H = plotH + AXIS_H;
+  const baseY = plotH;
+
+  const marks = placed.map(({ r, px, level }) => {
+    const y = baseY - (level + 1) * (TICK_H + STACK_GAP);
+    return `<g class="tick" data-id="${r.id}" tabindex="0" role="img"
+      aria-label="${esc(r.id)}, ${esc(r.status)}, idle ${r.days_since_update} days">
+      <rect x="${(px - TICK_W / 2).toFixed(1)}" y="${y.toFixed(1)}"
+            width="${TICK_W}" height="${TICK_H}" rx="1" fill="${COLOR[r.status]}"></rect>
+    </g>`;
+  }).join("");
+
+  const gridDays = [0, 15, 30, 45, 60, 75, 90, 105, 120];
+  const axis = gridDays.map(d => {
+    const px = x(d);
+    return `<line class="axis-line" x1="${px}" y1="${baseY}" x2="${px}" y2="${baseY + 5}"></line>
+      <text class="axis-text" x="${px}" y="${baseY + 18}" text-anchor="middle">${d === MAX ? d + "+" : d}</text>`;
+  }).join("");
+
+  const tx = x(STALL_DAYS);
+  const threshold = `
+    <line class="thresh" x1="${tx}" y1="2" x2="${tx}" y2="${baseY}"></line>
+    <text class="thresh-text" x="${tx + 5}" y="12">stall threshold — 30 days</text>`;
+
+  $("pulse").innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="group"
+         aria-label="Distribution of initiatives by days since last update">
+      <line class="axis-line" x1="${PAD_L}" y1="${baseY}" x2="${W - PAD_R}" y2="${baseY}"></line>
+      ${threshold}
+      ${marks}
+      ${axis}
+      <text class="axis-text" x="${PAD_L}" y="${baseY + 30}">days since last update →</text>
+    </svg>`;
+
+  const byId = Object.fromEntries(rows.map(r => [r.id, r]));
+  $("pulse").querySelectorAll(".tick").forEach(g => {
+    const show = () => showReadout(byId[g.dataset.id]);
+    g.addEventListener("mouseenter", show);
+    g.addEventListener("focus", show);
+    g.addEventListener("click", show);
+  });
+}
+
+function showReadout(r) {
+  if (!r) return;
+  const dd = daysToDue(r.due_date);
+  const dueTxt = dd < 0 ? `${Math.abs(dd)}d overdue` : `due in ${dd}d`;
+  $("readout").innerHTML = `
+    <span class="r-id">${esc(r.id)} · ${esc(r.team)} · ${esc(r.workstream)}</span>
+    <span class="r-title">${esc(r.title)}</span>
+    <span class="r-facts">${esc(r.owner)} — ${esc(r.status)} · ${r.percent_complete}% complete ·
+      ${dueTxt} · last touched ${fmtDate(r.last_update)} (${r.days_since_update}d idle)</span>`;
+}
+
+/* ── Health by team ──────────────────────────────────────── */
+function renderTeams(rows) {
+  const groups = groupBy(rows, "team");
+  const ranked = Object.entries(groups).sort((a, b) => trouble(b[1]) - trouble(a[1]));
+
+  $("team-meta").textContent = `${ranked.length} team${ranked.length === 1 ? "" : "s"}`;
+  $("teams").innerHTML = ranked.map(([team, list]) => {
+    const segs = STATUSES.map(s => {
+      const n = list.filter(r => r.status === s).length;
+      if (!n) return "";
+      const pct = (100 * n / list.length).toFixed(2);
+      return `<div class="team-seg" style="width:${pct}%;background:${COLOR[s]}"
+        title="${s}: ${n}"></div>`;
+    }).join("");
+    const bad = list.filter(r => r.status === "Stalled" || r.status === "At Risk").length;
+    return `<div class="team-row">
+      <div class="team-top">
+        <span class="team-name">${esc(team)}</span>
+        <span class="team-count">${bad} of ${list.length} need attention</span>
+      </div>
+      <div class="team-bar">${segs}</div>
+    </div>`;
+  }).join("") || `<div class="empty">Nothing to show.</div>`;
+}
+
+function trouble(list) {
+  const bad = list.filter(r => r.status === "Stalled" || r.status === "At Risk").length;
+  return bad / list.length;
+}
+
+/* ── Drift by workstream ─────────────────────────────────── */
+function renderWorkstreams(rows) {
+  const groups = groupBy(rows, "workstream");
+  const ranked = Object.entries(groups)
+    .map(([w, list]) => ({
+      w,
+      stalled: list.filter(r => r.status === "Stalled").length,
+      risk: list.filter(r => r.status === "At Risk").length,
+      total: list.length
+    }))
+    .sort((a, b) => (b.stalled + b.risk) - (a.stalled + a.risk));
+
+  const max = Math.max(1, ...ranked.map(r => r.stalled + r.risk));
+
+  $("workstreams").innerHTML = ranked.map(r => `
+    <div class="team-row">
+      <div class="team-top">
+        <span class="team-name">${esc(r.w)}</span>
+        <span class="team-count">${r.stalled + r.risk} / ${r.total}</span>
+      </div>
+      <div class="team-bar" style="background:transparent">
+        <div class="team-seg" style="width:${100 * r.stalled / max}%;background:${COLOR["Stalled"]}"
+          title="Stalled: ${r.stalled}"></div>
+        <div class="team-seg" style="width:${100 * r.risk / max}%;background:${COLOR["At Risk"]}"
+          title="At risk: ${r.risk}"></div>
+      </div>
+    </div>`).join("") || `<div class="empty">Nothing to show.</div>`;
+}
+
+/* ── Table ───────────────────────────────────────────────── */
+function renderTable(rows) {
+  const dir = state.sortDir === "asc" ? 1 : -1;
+  const k = state.sortKey;
+  const sorted = [...rows].sort((a, b) => {
+    const av = a[k], bv = b[k];
+    if (typeof av === "number") return (av - bv) * dir;
+    return String(av).localeCompare(String(bv)) * dir;
+  });
+
+  $("table-meta").textContent =
+    `${sorted.length} of ${DATA.length} initiatives`;
+  $("empty").hidden = sorted.length > 0;
+
+  $("tbody").innerHTML = sorted.map(r => {
+    const dd = daysToDue(r.due_date);
+    const hot = r.days_since_update >= STALL_DAYS;
+    return `<tr>
+      <td class="id">${esc(r.id)}</td>
+      <td>
+        <div class="t-title">${esc(r.title)}</div>
+        <div class="t-sub">${esc(r.workstream)}</div>
+      </td>
+      <td>${esc(r.team)}</td>
+      <td>${esc(r.owner)}</td>
+      <td><span class="pill" style="background:${COLOR[r.status]}">${esc(r.status)}</span></td>
+      <td class="num">
+        <div class="meter">
+          <span>${r.percent_complete}%</span>
+          <span class="meter-track"><span class="meter-fill" style="width:${r.percent_complete}%"></span></span>
+        </div>
+      </td>
+      <td class="num">${fmtDate(r.due_date)}${dd < 0 && r.status !== "Complete" ? " ⚑" : ""}</td>
+      <td class="num"><span class="stale ${hot ? "hot" : ""}">${r.days_since_update}d</span></td>
+    </tr>`;
+  }).join("");
+
+  document.querySelectorAll("thead th").forEach(th => {
+    const on = th.dataset.key === k;
+    th.classList.toggle("sorted", on);
+    th.querySelector(".arrow").textContent = on ? (state.sortDir === "asc" ? "↑" : "↓") : "↕";
+  });
+}
+
+/* ── Helpers ─────────────────────────────────────────────── */
+function groupBy(rows, key) {
+  return rows.reduce((acc, r) => ((acc[r[key]] ||= []).push(r), acc), {});
+}
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+/* ── Wiring ──────────────────────────────────────────────── */
+function render() {
+  const rows = visible();
+  renderKPIs(rows);
+  renderPulse(rows);
+  renderTeams(rows);
+  renderWorkstreams(rows);
+  renderTable(rows);
+}
+
+function init() {
+  $("stamp-date").textContent = fmtDate(AS_OF);
+  $("stamp-count").textContent = DATA.length;
+
+  fillSelect("f-team", uniq("team"));
+  fillSelect("f-status", STATUSES);
+  fillSelect("f-workstream", uniq("workstream"));
+
+  $("legend").innerHTML = STATUSES.map(s =>
+    `<span><i style="background:${COLOR[s]}"></i>${s}</span>`).join("");
+
+  $("f-team").addEventListener("change", e => { state.team = e.target.value; render(); });
+  $("f-status").addEventListener("change", e => { state.status = e.target.value; render(); });
+  $("f-workstream").addEventListener("change", e => { state.workstream = e.target.value; render(); });
+  $("f-search").addEventListener("input", e => { state.search = e.target.value; render(); });
+
+  $("btn-stalled").addEventListener("click", () => {
+    $("f-status").value = state.status = "Stalled";
+    render();
+  });
+  $("btn-reset").addEventListener("click", () => {
+    Object.assign(state, { team: "", status: "", workstream: "", search: "" });
+    $("f-team").value = $("f-status").value = $("f-workstream").value = $("f-search").value = "";
+    render();
+  });
+  $("btn-print").addEventListener("click", () => window.print());
+
+  document.querySelectorAll("thead th").forEach(th => {
+    th.setAttribute("tabindex", "0");
+    const sort = () => {
+      const key = th.dataset.key;
+      if (state.sortKey === key) {
+        state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+      } else {
+        state.sortKey = key;
+        state.sortDir = (key === "days_since_update" || key === "percent_complete") ? "desc" : "asc";
+      }
+      renderTable(visible());
+    };
+    th.addEventListener("click", sort);
+    th.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); sort(); } });
+  });
+
+  render();
+}
+
+function fillSelect(id, values) {
+  const sel = $(id);
+  values.forEach(v => {
+    const o = document.createElement("option");
+    o.value = o.textContent = v;
+    sel.appendChild(o);
+  });
+}
+
+init();
+</script>
+</body>
+</html>

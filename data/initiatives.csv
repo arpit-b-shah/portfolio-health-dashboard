@@ -1,0 +1,129 @@
+id,title,team,workstream,owner,status,percent_complete,start_date,due_date,last_update,days_since_update
+INI-001,Pilot member contact preferences,Member Experience,Process Redesign,Natalie Ramnarine,On Track,63,2026-04-03,2026-08-01,2026-06-30,0
+INI-002,Streamline measure specification library for regional markets,Member Experience,Vendor Onboarding,Ravi Kowalski,At Risk,92,2025-08-16,2026-02-22,2026-06-09,21
+INI-003,Streamline lab result normalization (phase 2),Provider Engagement,Compliance & Audit,Devin Novak,On Track,45,2026-02-17,2026-09-25,2026-06-19,11
+INI-004,Standardize intake validation across delegated partners,Member Experience,Outreach Campaign,Dana Novak,Complete,100,2026-05-08,2027-02-06,2026-05-23,38
+INI-005,Instrument measure specification library (phase 2),Care Management,Data Integration,Devin Castellanos,On Track,65,2026-03-15,2026-09-03,2026-06-08,22
+INI-006,Streamline eligibility reconciliation for regional markets,Analytics & Reporting,Reporting & Insight,Hugo Castellanos,Complete,100,2025-10-20,2026-09-07,2026-06-13,17
+INI-007,Pilot intake validation ahead of annual audit,Analytics & Reporting,Reporting & Insight,Dana Novak,At Risk,68,2025-08-20,2026-04-18,2026-06-23,7
+INI-008,Retire chart retrieval workflow,Care Management,Gap Closure,Renee Okafor,On Track,36,2025-12-19,2026-08-18,2026-06-13,17
+INI-009,Expand campaign attribution (phase 2),Member Experience,Data Integration,Marcus Delgado,Complete,100,2025-10-25,2026-03-29,2026-05-19,42
+INI-010,Standardize site-of-care analytics (phase 2),Provider Engagement,Vendor Onboarding,Peter Ramnarine,Complete,100,2025-11-11,2026-05-28,2026-06-23,7
+INI-011,Streamline risk stratification inputs for the self-service layer,Data Governance,Reporting & Insight,Dana Kowalski,At Risk,77,2025-08-19,2026-05-04,2026-06-29,1
+INI-012,Standardize quality dashboard distribution for regional markets,Provider Engagement,Gap Closure,Dana Novak,At Risk,63,2025-10-24,2026-03-03,2026-06-11,19
+INI-013,Retire campaign attribution,Provider Engagement,Compliance & Audit,Grant Vasquez,On Track,78,2025-08-25,2026-08-23,2026-06-26,4
+INI-014,Automate risk stratification inputs for regional markets,Member Experience,Reporting & Insight,Simone Halloran,Complete,100,2026-03-20,2027-02-02,2026-06-12,18
+INI-015,Pilot care gap routing,Provider Engagement,Process Redesign,Elena Moreau,On Track,20,2026-04-05,2027-02-26,2026-06-25,5
+INI-016,Redesign roster ingestion (phase 2),Care Management,Vendor Onboarding,Lena Adeyemi,Stalled,10,2026-05-18,2026-09-16,2026-05-03,58
+INI-017,Standardize provider scorecard refresh,Analytics & Reporting,Vendor Onboarding,Priya Sandoval,Complete,100,2026-05-01,2027-01-29,2026-05-19,42
+INI-018,Redesign vendor SLA tracking (phase 2),Provider Engagement,Compliance & Audit,Omar Lindqvist,Complete,100,2025-08-10,2026-02-22,2026-06-05,25
+INI-019,Automate outreach scheduling (phase 2),Member Experience,Vendor Onboarding,Grant Whitfield,At Risk,97,2025-08-18,2025-11-24,2026-06-28,2
+INI-020,Instrument chart retrieval workflow (phase 2),Provider Engagement,Compliance & Audit,Ravi Novak,Stalled,86,2025-09-16,2026-05-23,2026-04-03,88
+INI-021,Redesign supplemental file submission,Vendor & Delivery,Process Redesign,Peter Sandoval,On Track,33,2026-05-23,2027-04-29,2026-06-24,6
+INI-022,Standardize lab result normalization,Clinical Operations,Gap Closure,Elena Okafor,On Track,16,2026-06-16,2026-09-27,2026-06-19,11
+INI-023,Redesign supplemental file submission ahead of annual audit,Care Management,Process Redesign,Omar Delgado,On Track,28,2026-01-30,2026-12-31,2026-06-22,8
+INI-024,Expand site-of-care analytics,Provider Engagement,Process Redesign,Tobias Tanaka,On Track,97,2025-12-10,2026-08-02,2026-06-24,6
+INI-025,Automate risk stratification inputs,Vendor & Delivery,Vendor Onboarding,Natalie Kowalski,At Risk,80,2026-01-24,2026-06-13,2026-06-22,8
+INI-026,Consolidate appeals turnaround reporting,Data Governance,Data Integration,Grant Novak,Stalled,33,2026-01-03,2026-12-28,2026-05-23,38
+INI-027,Expand chart retrieval workflow for regional markets,Provider Engagement,Data Integration,Hugo Tanaka,At Risk,72,2026-01-09,2026-05-01,2026-06-29,1
+INI-028,Redesign site-of-care analytics,Data Governance,Reporting & Insight,Grant Halloran,At Risk,49,2025-10-19,2026-04-01,2026-06-25,5
+INI-029,Expand supplemental file submission (phase 2),Care Management,Data Integration,Grant Kowalski,Stalled,89,2025-09-09,2026-05-16,2026-05-10,51
+INI-030,Instrument vendor SLA tracking for regional markets,Vendor & Delivery,Reporting & Insight,Natalie Castellanos,On Track,65,2026-03-02,2026-11-19,2026-06-23,7
+INI-031,Consolidate member contact preferences ahead of annual audit,Data Governance,Reporting & Insight,Omar Ferreira,Stalled,56,2025-11-24,2026-09-18,2026-05-19,42
+INI-032,Redesign site-of-care analytics,Provider Engagement,Process Redesign,Devin Vasquez,On Track,84,2025-10-18,2026-07-23,2026-06-29,1
+INI-033,Pilot campaign attribution for the self-service layer,Member Experience,Gap Closure,Hugo Kowalski,Stalled,18,2026-03-15,2026-09-12,2026-03-31,91
+INI-034,Streamline provider scorecard refresh (phase 2),Member Experience,Reporting & Insight,Lena Lindqvist,On Track,67,2026-02-19,2026-09-30,2026-06-24,6
+INI-035,Streamline chart retrieval workflow,Vendor & Delivery,Data Integration,Claire Okafor,Stalled,39,2026-01-31,2026-07-01,2026-03-06,116
+INI-036,Instrument care gap routing for the self-service layer,Care Management,Vendor Onboarding,Dana Ramnarine,On Track,7,2026-04-18,2027-04-30,2026-06-05,25
+INI-037,Streamline chart retrieval workflow,Analytics & Reporting,Data Integration,Lena Halloran,Stalled,78,2025-09-14,2026-04-08,2026-05-28,33
+INI-038,Migrate appeals turnaround reporting,Data Governance,Data Integration,Priya Moreau,Complete,100,2026-04-20,2027-02-24,2026-05-22,39
+INI-039,Retire roster ingestion for the self-service layer,Analytics & Reporting,Compliance & Audit,Elena Ferreira,Stalled,65,2025-11-20,2026-07-20,2026-04-25,66
+INI-040,Redesign lab result normalization for regional markets,Member Experience,Outreach Campaign,Marcus Whitfield,On Track,23,2026-05-12,2026-10-19,2026-06-19,11
+INI-041,Instrument audit evidence collection,Analytics & Reporting,Reporting & Insight,Tobias Boateng,Stalled,84,2026-02-08,2026-08-16,2026-05-07,54
+INI-042,Instrument supplemental file submission ahead of annual audit,Provider Engagement,Data Integration,Marcus Adeyemi,Stalled,32,2026-04-28,2026-09-02,2026-03-13,109
+INI-043,Expand outreach scheduling across delegated partners,Provider Engagement,Gap Closure,Tobias Castellanos,On Track,23,2026-02-07,2027-01-07,2026-06-09,21
+INI-044,Migrate campaign attribution for the self-service layer,Member Experience,Outreach Campaign,Priya Sandoval,Complete,100,2026-06-02,2026-10-08,2026-05-22,39
+INI-045,Migrate campaign attribution for the self-service layer,Data Governance,Gap Closure,Grant Lindqvist,Complete,100,2026-01-06,2026-11-16,2026-05-21,40
+INI-046,Consolidate site-of-care analytics (phase 2),Vendor & Delivery,Process Redesign,Ravi Adeyemi,Complete,100,2026-01-01,2026-05-25,2026-05-29,32
+INI-047,Standardize appeals turnaround reporting,Clinical Operations,Data Integration,Aisha Lindqvist,On Track,30,2026-06-01,2027-03-07,2026-06-21,9
+INI-048,Instrument chart retrieval workflow ahead of annual audit,Clinical Operations,Process Redesign,Aisha Okafor,Complete,100,2025-10-12,2026-09-29,2026-05-26,35
+INI-049,Retire campaign attribution for regional markets,Provider Engagement,Outreach Campaign,Tobias Moreau,At Risk,59,2025-09-22,2026-05-16,2026-06-23,7
+INI-050,Instrument campaign attribution,Provider Engagement,Reporting & Insight,Natalie Tanaka,On Track,48,2025-12-04,2026-10-03,2026-06-29,1
+INI-051,Automate eligibility reconciliation,Vendor & Delivery,Reporting & Insight,Lena Sandoval,On Track,81,2025-12-02,2026-08-04,2026-06-25,5
+INI-052,Standardize vendor SLA tracking across delegated partners,Data Governance,Reporting & Insight,Ravi Boateng,Complete,100,2025-09-14,2026-07-04,2026-05-26,35
+INI-053,Standardize audit evidence collection,Data Governance,Gap Closure,Claire Moreau,Complete,100,2025-11-28,2026-11-15,2026-06-07,23
+INI-054,Standardize vendor SLA tracking ahead of annual audit,Clinical Operations,Data Integration,Elena Lindqvist,On Track,28,2026-05-13,2027-03-30,2026-06-05,25
+INI-055,Consolidate site-of-care analytics,Vendor & Delivery,Vendor Onboarding,Dana Lindqvist,On Track,53,2026-03-30,2026-10-06,2026-06-28,2
+INI-056,Retire member contact preferences for regional markets,Provider Engagement,Compliance & Audit,Claire Moreau,At Risk,81,2025-08-31,2026-04-16,2026-06-10,20
+INI-057,Migrate audit evidence collection,Care Management,Process Redesign,Aisha Boateng,Complete,100,2025-10-25,2026-02-25,2026-06-09,21
+INI-058,Consolidate care gap routing for regional markets,Vendor & Delivery,Data Integration,Renee Boateng,Complete,100,2026-01-16,2026-06-21,2026-06-17,13
+INI-059,Consolidate lab result normalization for the self-service layer,Clinical Operations,Compliance & Audit,Claire Boateng,On Track,64,2026-02-21,2027-02-09,2026-06-28,2
+INI-060,Redesign provider scorecard refresh for the self-service layer,Member Experience,Vendor Onboarding,Claire Delgado,At Risk,97,2025-12-21,2026-05-19,2026-06-28,2
+INI-061,Consolidate supplemental file submission for the self-service layer,Provider Engagement,Compliance & Audit,Aisha Lindqvist,On Track,39,2026-02-23,2026-10-28,2026-06-27,3
+INI-062,Retire quality dashboard distribution for the self-service layer,Care Management,Gap Closure,Tobias Okafor,At Risk,97,2025-12-29,2026-05-29,2026-06-22,8
+INI-063,Instrument roster ingestion,Vendor & Delivery,Compliance & Audit,Peter Sandoval,At Risk,60,2025-09-25,2026-02-06,2026-06-15,15
+INI-064,Retire vendor SLA tracking (phase 2),Vendor & Delivery,Gap Closure,Bea Adeyemi,Stalled,88,2025-12-02,2026-08-13,2026-05-31,30
+INI-065,Instrument member contact preferences (phase 2),Clinical Operations,Reporting & Insight,Bea Novak,Complete,100,2026-02-05,2026-11-09,2026-05-23,38
+INI-066,Standardize lab result normalization for the self-service layer,Clinical Operations,Outreach Campaign,Marcus Boateng,On Track,14,2026-03-13,2027-02-26,2026-06-29,1
+INI-067,Automate intake validation for the self-service layer,Analytics & Reporting,Compliance & Audit,Claire Sandoval,Stalled,38,2026-04-21,2027-04-05,2026-05-04,57
+INI-068,Expand measure specification library for regional markets,Analytics & Reporting,Vendor Onboarding,Lena Halloran,Stalled,13,2026-02-11,2027-02-23,2026-05-24,37
+INI-069,Instrument vendor SLA tracking ahead of annual audit,Clinical Operations,Vendor Onboarding,Lena Vasquez,On Track,84,2025-10-10,2026-10-15,2026-06-15,15
+INI-070,Instrument member contact preferences (phase 2),Vendor & Delivery,Reporting & Insight,Natalie Moreau,At Risk,93,2025-11-15,2026-05-10,2026-06-23,7
+INI-071,Pilot care gap routing for the self-service layer,Provider Engagement,Process Redesign,Dana Boateng,At Risk,67,2025-09-07,2026-02-15,2026-06-29,1
+INI-072,Redesign provider scorecard refresh (phase 2),Clinical Operations,Compliance & Audit,Elena Delgado,Stalled,96,2025-08-22,2026-07-22,2026-04-25,66
+INI-073,Streamline intake validation for the self-service layer,Analytics & Reporting,Reporting & Insight,Peter Castellanos,On Track,60,2026-03-24,2026-07-26,2026-06-21,9
+INI-074,Pilot member contact preferences (phase 2),Data Governance,Reporting & Insight,Peter Halloran,On Track,15,2026-03-25,2027-02-23,2026-06-25,5
+INI-075,Consolidate appeals turnaround reporting for the self-service layer,Vendor & Delivery,Data Integration,Omar Moreau,At Risk,97,2025-10-25,2026-05-25,2026-06-17,13
+INI-076,Streamline outreach scheduling ahead of annual audit,Member Experience,Process Redesign,Omar Okafor,Stalled,20,2026-04-11,2027-02-26,2026-04-04,87
+INI-077,Instrument measure specification library,Provider Engagement,Gap Closure,Lena Whitfield,Complete,100,2026-01-20,2026-10-10,2026-05-22,39
+INI-078,Streamline provider scorecard refresh,Analytics & Reporting,Data Integration,Omar Castellanos,On Track,83,2026-04-14,2026-07-14,2026-06-20,10
+INI-079,Streamline member contact preferences,Provider Engagement,Compliance & Audit,Aisha Adeyemi,Stalled,58,2025-11-03,2026-09-15,2026-05-27,34
+INI-080,Standardize care gap routing ahead of annual audit,Clinical Operations,Reporting & Insight,Devin Lindqvist,Stalled,97,2025-08-16,2025-11-25,2026-05-18,43
+INI-081,Redesign measure specification library,Member Experience,Reporting & Insight,Renee Vasquez,At Risk,92,2025-08-28,2026-03-07,2026-06-13,17
+INI-082,Pilot vendor SLA tracking,Member Experience,Reporting & Insight,Marcus Novak,Complete,100,2025-08-04,2025-11-04,2026-05-21,40
+INI-083,Instrument intake validation (phase 2),Member Experience,Gap Closure,Dana Okafor,At Risk,90,2025-10-20,2026-04-02,2026-06-08,22
+INI-084,Redesign roster ingestion,Analytics & Reporting,Outreach Campaign,Bea Vasquez,On Track,23,2026-06-11,2026-12-19,2026-06-19,11
+INI-085,Standardize roster ingestion,Analytics & Reporting,Compliance & Audit,Tobias Halloran,At Risk,66,2026-02-18,2026-06-14,2026-06-26,4
+INI-086,Redesign measure specification library ahead of annual audit,Analytics & Reporting,Data Integration,Hugo Boateng,On Track,77,2025-10-19,2026-07-12,2026-06-06,24
+INI-087,Redesign risk stratification inputs across delegated partners,Clinical Operations,Gap Closure,Omar Lindqvist,On Track,6,2026-04-27,2026-12-30,2026-06-25,5
+INI-088,Expand member contact preferences ahead of annual audit,Member Experience,Data Integration,Dana Delgado,Stalled,72,2025-09-05,2026-01-30,2026-03-23,99
+INI-089,Retire site-of-care analytics,Analytics & Reporting,Data Integration,Renee Vasquez,At Risk,64,2025-11-20,2026-03-08,2026-06-26,4
+INI-090,Pilot member contact preferences (phase 2),Clinical Operations,Compliance & Audit,Bea Novak,Complete,100,2025-12-09,2026-06-17,2026-06-26,4
+INI-091,Retire eligibility reconciliation (phase 2),Provider Engagement,Outreach Campaign,Simone Boateng,Complete,100,2025-09-26,2026-10-01,2026-06-09,21
+INI-092,Instrument measure specification library,Provider Engagement,Outreach Campaign,Tobias Adeyemi,Stalled,92,2025-08-06,2026-02-06,2026-05-30,31
+INI-093,Automate lab result normalization for regional markets,Clinical Operations,Data Integration,Priya Boateng,Stalled,41,2026-02-06,2026-08-27,2026-05-10,51
+INI-094,Standardize measure specification library,Analytics & Reporting,Data Integration,Renee Whitfield,At Risk,60,2025-10-23,2026-07-14,2026-06-20,10
+INI-095,Redesign appeals turnaround reporting,Clinical Operations,Data Integration,Bea Moreau,On Track,9,2026-05-22,2027-03-08,2026-06-22,8
+INI-096,Automate outreach scheduling,Care Management,Vendor Onboarding,Elena Kowalski,On Track,82,2025-09-18,2026-08-16,2026-06-30,0
+INI-097,Consolidate vendor SLA tracking for regional markets,Member Experience,Vendor Onboarding,Renee Boateng,On Track,52,2026-03-11,2026-08-22,2026-06-19,11
+INI-098,Automate quality dashboard distribution (phase 2),Clinical Operations,Vendor Onboarding,Claire Delgado,Stalled,38,2026-03-31,2027-02-22,2026-05-31,30
+INI-099,Retire measure specification library,Provider Engagement,Vendor Onboarding,Ravi Novak,Stalled,42,2025-09-05,2026-09-05,2026-05-04,57
+INI-100,Consolidate measure specification library for regional markets,Analytics & Reporting,Gap Closure,Marcus Sandoval,On Track,66,2025-11-02,2026-11-02,2026-06-23,7
+INI-101,Standardize chart retrieval workflow across delegated partners,Care Management,Outreach Campaign,Lena Halloran,On Track,80,2025-08-20,2026-07-01,2026-06-26,4
+INI-102,Standardize measure specification library ahead of annual audit,Analytics & Reporting,Outreach Campaign,Devin Okafor,Stalled,11,2026-06-08,2026-11-14,2026-04-04,87
+INI-103,Streamline outreach scheduling (phase 2),Data Governance,Compliance & Audit,Tobias Ferreira,At Risk,39,2025-08-11,2026-07-06,2026-06-30,0
+INI-104,Streamline roster ingestion for the self-service layer,Member Experience,Gap Closure,Simone Kowalski,On Track,21,2026-06-06,2027-03-31,2026-06-23,7
+INI-105,Automate supplemental file submission for regional markets,Data Governance,Process Redesign,Marcus Tanaka,On Track,23,2026-05-23,2027-03-05,2026-06-26,4
+INI-106,Migrate eligibility reconciliation ahead of annual audit,Vendor & Delivery,Compliance & Audit,Dana Kowalski,On Track,71,2025-12-27,2026-10-09,2026-06-16,14
+INI-107,Standardize eligibility reconciliation ahead of annual audit,Provider Engagement,Reporting & Insight,Claire Sandoval,Stalled,70,2025-09-30,2026-07-18,2026-04-19,72
+INI-108,Streamline audit evidence collection,Clinical Operations,Compliance & Audit,Priya Tanaka,On Track,70,2025-09-25,2026-07-24,2026-06-28,2
+INI-109,Pilot quality dashboard distribution for regional markets,Care Management,Compliance & Audit,Claire Delgado,Stalled,95,2026-02-03,2026-09-08,2026-05-08,53
+INI-110,Migrate supplemental file submission for regional markets,Member Experience,Reporting & Insight,Natalie Delgado,On Track,61,2025-12-20,2026-10-20,2026-06-18,12
+INI-111,Retire provider scorecard refresh ahead of annual audit,Analytics & Reporting,Gap Closure,Claire Sandoval,On Track,31,2026-06-05,2027-04-10,2026-06-20,10
+INI-112,Expand measure specification library ahead of annual audit,Care Management,Process Redesign,Marcus Delgado,Complete,100,2025-09-18,2026-07-01,2026-05-24,37
+INI-113,Instrument risk stratification inputs for regional markets,Data Governance,Reporting & Insight,Lena Lindqvist,On Track,40,2026-04-16,2026-12-23,2026-06-27,3
+INI-114,Expand campaign attribution,Care Management,Gap Closure,Renee Delgado,At Risk,97,2025-09-01,2026-02-24,2026-06-23,7
+INI-115,Pilot care gap routing (phase 2),Vendor & Delivery,Gap Closure,Hugo Okafor,On Track,31,2026-02-02,2026-12-30,2026-06-20,10
+INI-116,Pilot quality dashboard distribution for regional markets,Analytics & Reporting,Reporting & Insight,Marcus Castellanos,At Risk,93,2025-08-17,2026-06-04,2026-06-27,3
+INI-117,Automate site-of-care analytics (phase 2),Provider Engagement,Reporting & Insight,Marcus Adeyemi,On Track,31,2026-03-27,2027-01-13,2026-06-16,14
+INI-118,Pilot quality dashboard distribution,Clinical Operations,Vendor Onboarding,Devin Moreau,Stalled,97,2025-08-23,2026-06-23,2026-03-19,103
+INI-119,Migrate supplemental file submission for the self-service layer,Provider Engagement,Outreach Campaign,Elena Whitfield,On Track,43,2025-12-15,2026-11-26,2026-06-21,9
+INI-120,Pilot measure specification library across delegated partners,Clinical Operations,Process Redesign,Omar Tanaka,On Track,52,2026-05-24,2026-11-08,2026-06-23,7
+INI-121,Expand campaign attribution,Vendor & Delivery,Reporting & Insight,Grant Ramnarine,Stalled,64,2025-12-31,2026-04-24,2026-05-12,49
+INI-122,Automate provider scorecard refresh for the self-service layer,Clinical Operations,Gap Closure,Dana Ramnarine,Stalled,64,2026-03-21,2026-07-19,2026-05-18,43
+INI-123,Migrate member contact preferences ahead of annual audit,Vendor & Delivery,Compliance & Audit,Natalie Boateng,On Track,81,2025-10-27,2026-08-23,2026-06-21,9
+INI-124,Retire provider scorecard refresh across delegated partners,Vendor & Delivery,Compliance & Audit,Elena Ramnarine,Complete,100,2025-12-01,2026-04-20,2026-06-11,19
+INI-125,Standardize provider scorecard refresh,Data Governance,Gap Closure,Natalie Okafor,On Track,29,2025-11-25,2026-11-29,2026-06-20,10
+INI-126,Standardize audit evidence collection for regional markets,Clinical Operations,Process Redesign,Natalie Boateng,Complete,100,2025-10-22,2026-05-29,2026-06-14,16
+INI-127,Redesign quality dashboard distribution (phase 2),Provider Engagement,Reporting & Insight,Elena Whitfield,Complete,100,2026-05-23,2026-12-27,2026-05-16,45
+INI-128,Standardize member contact preferences,Analytics & Reporting,Reporting & Insight,Dana Castellanos,On Track,0,2026-05-12,2027-01-24,2026-06-25,5
